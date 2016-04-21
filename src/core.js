@@ -6,36 +6,7 @@ var isFunction = require('./libs/isFunction');
 var isPlainObject = require('./libs/isPlainObject');
 
 module.exports = (function (undefined) {
-    var doc = window.document;
-
-    if (!doc) {
-        return {};
-    }
-
-    var cageUtils = function (selector, context) {
-        return new cageUtils.fn.init(selector, context);
-    };
-
-    cageUtils.fn = cageUtils.prototype = {
-        map: function (callback) {
-            return cageUtils(map(this, callback));
-        },
-        attr: function (name, value) {
-            if (this.length === 0) {
-                return this;
-            }
-
-            if (value === undefined) {
-                return this[0].getAttribute(name);
-            }
-
-            return this.map(function (item) {
-                item.setAttribute(name, value);
-            })
-        }
-    };
-
-    cageUtils.extend = cageUtils.fn.extend = function () {
+    var extend = function () {
         var options, name, src, copy, copyIsArray, clone,
             target = arguments[0] || {},
             i = 1,
@@ -93,7 +64,40 @@ module.exports = (function (undefined) {
         return target;
     };
 
-    cageUtils.fn.init = function (selector, context) {
+    if (typeof window === 'undefined') {
+        return {
+            extend: extend
+        };
+    }
+
+    var doc = window.document;
+
+    var cageUtils = function (selector, context) {
+        return new cageUtils.fn.init(selector, context);
+    };
+
+    cageUtils.fn = cageUtils.prototype = {
+        map: function (callback) {
+            return cageUtils(map(this, callback));
+        },
+        attr: function (name, value) {
+            if (this.length === 0) {
+                return this;
+            }
+
+            if (value === undefined) {
+                return this[0].getAttribute(name);
+            }
+
+            return this.map(function (item) {
+                item.setAttribute(name, value);
+            })
+        }
+    };
+
+    cageUtils.extend = cageUtils.fn.extend = extend;
+
+    var init = cageUtils.fn.init = function (selector, context) {
         var self = this;
         var nodeList;
 
@@ -115,8 +119,7 @@ module.exports = (function (undefined) {
         });
     };
 
-    cageUtils.fn.init.prototype = cageUtils.prototype;
-    cageUtils.fn.init.constructor = cageUtils;
+    init.prototype = cageUtils.fn;
 
     return cageUtils;
 })();
