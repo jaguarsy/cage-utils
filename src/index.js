@@ -3,26 +3,19 @@
  */
 var cageUtils = require('./core');
 
-var map = require('./libs/map'),
-    isFunction = require('./libs/isFunction'),
-    isPlainObject = require('./libs/isPlainObject'),
-    toNumber = require('./libs/toNumber'),
-    isNumeric = require('./libs/isNumeric'),
-    range = require('./libs/range'),
-    times = require('./libs/times'),
-    delay = require('./libs/delay');
+var r = function (name) {
+    return require('./libs/' + name);
+};
+
+var libObj = {};
+
+['isFunction', 'isPlainObject', 'toNumber', 'isNumeric',
+    'map', 'range', 'times', 'delay'].forEach(function (item) {
+    libObj[item] = r(item);
+});
 
 module.exports = (function () {
-    cageUtils.extend({
-        map: map,
-        isFunction: isFunction,
-        isPlainObject: isPlainObject,
-        toNumber: toNumber,
-        isNumeric: isNumeric,
-        range: range,
-        times: times,
-        delay: delay
-    });
+    cageUtils.extend(libObj);
 
     var root = typeof self == 'object' && self.self === self && self ||
         typeof global == 'object' && global.global === global && global ||
