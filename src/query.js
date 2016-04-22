@@ -14,13 +14,13 @@ module.exports = (function (undefined) {
 
     var doc = window.document;
 
-    var cageUtils = function (selector, context) {
-        return new cageUtils.fn.init(selector, context);
+    var cageQuery = function (selector, context) {
+        return new cageQuery.fn.init(selector, context);
     };
 
-    cageUtils.fn = cageUtils.prototype = {
+    cageQuery.fn = cageQuery.prototype = {
         map: function (callback) {
-            return cageUtils(map(this, callback));
+            return cageQuery(map(this, callback));
         },
         attr: function (name, value) {
             if (this.length === 0) {
@@ -37,9 +37,9 @@ module.exports = (function (undefined) {
         }
     };
 
-    cageUtils.extend = cageUtils.fn.extend = extend;
+    cageQuery.extend = cageQuery.fn.extend = extend;
 
-    var init = cageUtils.fn.init = function (selector, context) {
+    var init = cageQuery.fn.init = function (selector, context) {
         var self = this;
         var nodeList;
 
@@ -49,7 +49,7 @@ module.exports = (function (undefined) {
             nodeList = [selector];
         } else if (
             selector instanceof NodeList ||
-            selector instanceof cageUtils ||
+            selector instanceof cageQuery ||
             selector instanceof Array) {
             nodeList = selector;
         }
@@ -61,7 +61,7 @@ module.exports = (function (undefined) {
         });
     };
 
-    init.prototype = cageUtils.fn;
+    init.prototype = cageQuery.fn;
 
-    return cageUtils;
+    return cageQuery;
 })();
