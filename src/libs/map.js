@@ -4,11 +4,7 @@
 var isFunction = require('./isFunction');
 var chainResult = require('./chainResult');
 
-module.exports = function () {
-    var args = arguments,
-        list = this._chain ? this.value() : args[0],
-        callback = this._chain ? args[0] : args[1];
-
+module.exports = function (list, callback) {
     var result = [];
 
     if (!list || !callback || !isFunction(callback)) {

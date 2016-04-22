@@ -19,7 +19,9 @@ var libChainObj = {};
 
 //chain functions, add to cageUtils' prototype
 ['toNumber', 'map'].forEach(function (name) {
-    libChainObj[name] = libObj[name] || r(name);
+    libChainObj[name] = function (callback) {
+        return (libObj[name] || r(name)).call(this, this.value(), callback);
+    };
 });
 
 module.exports = (function () {
